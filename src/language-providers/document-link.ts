@@ -1,7 +1,7 @@
 import type { TextDocument } from "vscode";
 import { DocumentLink, Position, Range } from "vscode";
 import { REGEXP } from "../constants";
-import { createInternalUrl, UriAction } from "../url-utils";
+import { createOpvsUrl, UriCommand } from "../url-utils";
 
 interface LinkMatch {
 	range: Range;
@@ -40,7 +40,10 @@ export const provideDocumentLinks = (
 		({ range, vaultValue, itemValue }) =>
 			new DocumentLink(
 				range,
-				createInternalUrl(UriAction.OpenItem, { vaultValue, itemValue }),
+				createOpvsUrl(UriCommand.ViewItem, {
+					vault: vaultValue,
+					item: itemValue,
+				}),
 			),
 	);
 };

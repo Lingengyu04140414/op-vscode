@@ -5,39 +5,61 @@ import { COMMANDS, QUALIFIED_EXTENSION_ID } from "./constants";
 import { Core } from "./core";
 import { logger } from "./logger";
 
-export enum UriAction {
-	OpenItem = "open-item",
-}
+// Extension-level URL handler
+// e.g. vscode://1Password.op-vscode?command=view-item&vault=...&item=...
 
-export enum AppAction {
+export enum UriCommand {
 	ViewItem = "view-item",
 }
 
-export const createInternalUrl = (
-	action: UriAction,
+export const createOpvsUrl = (
+	command: UriCommand,
 	queryParams: Record<string, string> = {},
 ) =>
 	Uri.from({
 		scheme: env.uriScheme,
 		authority: QUALIFIED_EXTENSION_ID,
-		query: new URLSearchParams({ action, ...queryParams }).toString(),
+		query: new URLSearchParams({ command, ...queryParams }).toString(),
 	});
+
+export class OpvsUriHandler implements UriHandler {
+	public async handleUri(uri: Uri): Promise<void> {
+		const params = new URLSearchParams(uri.query);
+		const command = params.get("command") as UriCommand;
+
+		switch (command) {
+			case UriCommand.ViewItem:
+				await commands.executeCommand(COMMANDS.OPEN_1PASSWORD, {
+					action: OPHAction.ViewItem,
+					vault: params.get("vault"),
+					item: params.get("item"),
+				});
+				break;
+		}
+	}
+}
+
+// Utilities for interacting with OPH
+
+export enum OPHAction {
+	ViewItem = "view-item",
+}
 
 export const createOpenOPHandler =
 	(core: InstanceType<typeof Core>) =>
 	// eslint-disable-next-line unicorn/no-object-as-default-parameter
-	async ({ action, ...args }: { action: AppAction | "" } = { action: "" }) => {
+	async ({ action, ...args }: { action: OPHAction | "" } = { action: "" }) => {
 		const url = new URL(`onepassword://${action}`);
 
 		switch (action) {
-			case AppAction.ViewItem:
-				const { vaultValue, itemValue } = args as {
-					vaultValue: string;
-					itemValue: string;
+			case OPHAction.ViewItem:
+				const { vault, item: itemValue } = args as {
+					vault: string;
+					item: string;
 				};
 
 				const vaultItem = await core.cli.execute<Item>(() =>
-					item.get(itemValue, { vault: vaultValue }),
+					item.get(itemValue, { vault }),
 				);
 
 				url.searchParams.append("a", core.accountUuid);
@@ -50,19 +72,3 @@ export const createOpenOPHandler =
 
 		await open(url.href);
 	};
-
-export class OpvsUriHandler implements UriHandler {
-	public async handleUri(uri: Uri): Promise<void> {
-		const params = new URLSearchParams(uri.query);
-
-		switch (params.get("action")) {
-			case UriAction.OpenItem:
-				await commands.executeCommand(COMMANDS.OPEN_1PASSWORD, {
-					action: AppAction.ViewItem,
-					vaultValue: params.get("vaultValue"),
-					itemValue: params.get("itemValue"),
-				});
-				break;
-		}
-	}
-}

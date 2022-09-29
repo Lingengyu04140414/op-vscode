@@ -2,7 +2,7 @@ import { DocumentLink } from "vscode";
 import { createDocument } from "../../test/utils";
 import * as vscode from "../../test/vscode-mock";
 import * as urlUtils from "../url-utils";
-import { UriAction } from "../url-utils";
+import { UriCommand } from "../url-utils";
 import { provideDocumentLinks } from "./document-link";
 
 jest.mock("../url-utils");
@@ -26,14 +26,14 @@ describe("provideDocumentLinks", () => {
 	});
 
 	it("provides a document link if a secret reference is found", () => {
-		const internalUrlSpy = jest.spyOn(urlUtils, "createInternalUrl");
+		const internalUrlSpy = jest.spyOn(urlUtils, "createOpvsUrl");
 		const result = createDocumentLinks(reference);
 
 		expect(result).toHaveLength(1);
 		expect(documentLinkSpy).toHaveBeenCalledTimes(1);
-		expect(internalUrlSpy).toHaveBeenCalledWith(UriAction.OpenItem, {
-			vaultValue: "vault",
-			itemValue: "item",
+		expect(internalUrlSpy).toHaveBeenCalledWith(UriCommand.ViewItem, {
+			vault: "vault",
+			item: "item",
 		});
 	});
 
