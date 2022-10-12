@@ -21,7 +21,23 @@ export const COMMANDS = {
 // user. Other commands can still call these commands.
 export const INTERNAL_COMMANDS = {
 	AUTHENTICATE: makeCommand("authenticate"),
+	CONFIGURE_GITHUB_WORKFLOW_CONNECT: makeCommand(
+		"configureGithubWorkflowConnect",
+	),
+	CONFIGURE_GITHUB_WORKFLOW_SERVICE_ACCOUNTS: makeCommand(
+		"configureGithubWorkflowServiceAccounts",
+	),
 };
+
+export const GLOBAL_COMMANDS = {
+	SET_CONTEXT: "setContext",
+	OPEN_WALKTHROUGH: "workbench.action.openWalkthrough",
+};
+
+export const WALKTHROUGHS = [
+	"load-secrets-action-connect",
+	"load-secrets-action-service-accounts",
+];
 
 export const STATE = {
 	ACCOUNT_UUID: "accountUuid",

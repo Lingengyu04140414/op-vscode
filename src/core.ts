@@ -9,11 +9,13 @@ import { Items } from "./items";
 import { logger } from "./logger";
 import { Setup } from "./setup";
 import { createOpenOPHandler, OpvsUriHandler } from "./url-utils";
+import { Walkthroughs } from "./walkthroughs";
 
 export class Core {
 	public cli: CLI;
 	private setup: Setup;
 	public items: Items;
+	public walthroughs: Walkthroughs;
 
 	public constructor(public context: ExtensionContext) {
 		this.context.subscriptions.push(
@@ -31,6 +33,7 @@ export class Core {
 		this.cli = new CLI();
 		this.setup = new Setup(this);
 		this.items = new Items(this);
+		this.walthroughs = new Walkthroughs(this);
 
 		new Editor(this);
 		new Injection(this);

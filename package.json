@@ -146,6 +146,85 @@
 			{
 				"path": "./src/op-vscode.code-snippets"
 			}
+		],
+		"walkthroughs": [
+			{
+				"id": "load-secrets-action-connect",
+				"title": "Load secrets into GitHub Actions via Connect",
+				"description": "Use a Connect Server to load 1Password secrets into your GitHub Actions.",
+				"steps": [
+					{
+						"id": "deploy-connect",
+						"title": "Deploy 1Password Connect",
+						"description": "Before you can access secrets via Connect you'll need to first deploy 1Password to your infrastructure\n[Deploy Connect](https://developer.1password.com/docs/connect/get-started/#step-2-deploy-1password-connect-server)",
+						"media": {
+							"image": "media/image.png",
+							"altText": "Empty image"
+						}
+					},
+					{
+						"id": "set-connect-vars",
+						"title": "Set the Connect environment variables",
+						"description": "Set the `OP_CONNECT_HOST` and `OP_CONNECT_TOKEN` environment variables to your Connect instance's credentials, so it will be used to load secrets.",
+						"media": {
+							"image": "media/image.png",
+							"altText": "Empty image"
+						}
+					},
+					{
+						"id": "configure-action",
+						"title": "Configure your Workflow",
+						"description": "Set up the \"load-secrets-action\" GitHub Action in your Workflow config so that it can load requested secrets.\n[Configure Workflow](command:op-vscode.configureGithubWorkflowConnect)",
+						"media": {
+							"image": "media/image.png",
+							"altText": "Empty image"
+						}
+					},
+					{
+						"id": "learn-more",
+						"title": "Learn more...",
+						"description": "Check out the full documentation on the 1Password Developer Portal to learn more about accessing secrets within your GitHub Actions\n[See full documentation](http://developer.1password.com/docs/connect/github-actions-beta)",
+						"media": {
+							"image": "media/image.png",
+							"altText": "Empty image"
+						}
+					}
+				]
+			},
+			{
+				"id": "load-secrets-action-service-accounts",
+				"title": "Load secrets into GitHub Actions via a Service Account",
+				"description": "Use a Service Account to load 1Password secrets into your GitHub Actions.",
+				"steps": [
+					{
+						"id": "set-service-accounts-vars",
+						"title": "Set the Service Account environment variable",
+						"description": "Set the `OP_SERVICE_ACCOUNT_TOKEN` environment variable to your service account token, so it will be used to load secrets.",
+						"media": {
+							"image": "media/image.png",
+							"altText": "Empty image"
+						}
+					},
+					{
+						"id": "configure-action",
+						"title": "Configure your Workflow",
+						"description": "Set up the \"load-secrets-action\" GitHub Action in your Workflow config so that it can load requested secrets.\n[Configure Workflow](command:op-vscode.configureGithubWorkflowServiceAccounts)",
+						"media": {
+							"image": "media/image.png",
+							"altText": "Empty image"
+						}
+					},
+					{
+						"id": "learn-more",
+						"title": "Learn more...",
+						"description": "Check out the full documentation on the 1Password Developer Portal to learn more about accessing secrets within your GitHub Actions\n[See full documentation](http://developer.1password.com/docs/connect/github-actions-beta)",
+						"media": {
+							"image": "media/image.png",
+							"altText": "Empty image"
+						}
+					}
+				]
+			}
 		]
 	},
 	"prettier": "@1password/front-end-style/prettierrc.json",

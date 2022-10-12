@@ -1,7 +1,7 @@
 import { inject } from "@1password/op-js";
 import type { TextDocument, Uri } from "vscode";
 import { commands, ProgressLocation, window, workspace } from "vscode";
-import { COMMANDS, EXTENSION_ID, REGEXP } from "./constants";
+import { COMMANDS, EXTENSION_ID, GLOBAL_COMMANDS, REGEXP } from "./constants";
 import type { Core } from "./core";
 
 export class Injection {
@@ -67,7 +67,7 @@ export class Injection {
 
 		const matcher = new RegExp(REGEXP.SECRET_REFERENCE, "gm");
 		await commands.executeCommand(
-			"setContext",
+			GLOBAL_COMMANDS.SET_CONTEXT,
 			`${EXTENSION_ID}.injectable`,
 			matcher.test(document.getText()),
 		);

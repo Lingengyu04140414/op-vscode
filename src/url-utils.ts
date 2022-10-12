@@ -1,7 +1,12 @@
 import { Item, item } from "@1password/op-js";
 import { default as open } from "open";
 import { commands, env, Uri, UriHandler } from "vscode";
-import { COMMANDS, QUALIFIED_EXTENSION_ID } from "./constants";
+import {
+	COMMANDS,
+	GLOBAL_COMMANDS,
+	QUALIFIED_EXTENSION_ID,
+	WALKTHROUGHS,
+} from "./constants";
 import { Core } from "./core";
 import { logger } from "./logger";
 
@@ -10,6 +15,7 @@ import { logger } from "./logger";
 
 export enum UriCommand {
 	ViewItem = "view-item",
+	OpenWalkthrough = "open-walkthrough",
 }
 
 export const createOpvsUrl = (
@@ -34,6 +40,21 @@ export class OpvsUriHandler implements UriHandler {
 					vault: params.get("vault"),
 					item: params.get("item"),
 				});
+				break;
+			case UriCommand.OpenWalkthrough:
+				const walkthrough = params.get("walkthrough");
+				if (!WALKTHROUGHS.includes(walkthrough)) {
+					break;
+				}
+
+				await commands.executeCommand(
+					GLOBAL_COMMANDS.OPEN_WALKTHROUGH,
+					{
+						category: `${QUALIFIED_EXTENSION_ID}#${walkthrough}`,
+						// step: `${QUALIFIED_EXTENSION_ID}#${walkthrough}#step-id`,
+					},
+					false,
+				);
 				break;
 		}
 	}
